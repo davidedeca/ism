@@ -1,0 +1,194 @@
+#This file contains index list and other info
+
+
+#********************************
+# Species list with their indexes
+1	E	krome_idx_E
+2	H-	krome_idx_Hk
+3	H	krome_idx_H
+4	HE	krome_idx_HE
+5	H2	krome_idx_H2
+6	H+	krome_idx_Hj
+7	HE+	krome_idx_HEj
+8	H2+	krome_idx_H2j
+9	HE++	krome_idx_HEjj
+10	CR	krome_idx_CR
+11	g	krome_idx_g
+12	Tgas	krome_idx_Tgas
+13	dummy	krome_idx_dummy
+
+#Note: the first 9 variables above should be used
+# as framework code passive scalars, while the last 4
+# are employed inside KROME.
+
+
+#********************************
+# Species in a Python list of strings
+["E", "H-", "H", "HE", "H2", "H+", "HE+", "H2+", "HE++", "CR", \
+ "g", "Tgas", "dummy", ]
+
+
+#********************************
+#useful parameters
+krome_nrea           = 52   !number of reactions
+krome_nmols          = 9    !number of chemical species
+krome_nspec          = 13   !number of species including Tgas,CR,...
+krome_ndust          = 0    !number of dust bins (total)
+krome_ndustTypes     = 0    !number of dust types
+krome_nPhotoBins     = 10   !number of radiation bins
+krome_nPhotoRates    = 8    !number of photochemical reactions
+
+
+#********************************
+#list of reactions (including with multiple limits)
+1	H + E -> H+ + E + E
+2	H+ + E -> H
+3	H+ + E -> H
+4	HE + E -> HE+ + E + E
+5	HE+ + E -> HE
+6	HE+ + E -> HE
+7	HE+ + E -> HE++ + E + E
+8	HE++ + E -> HE+
+9	H + E -> H-
+10	H- + H -> H2 + E
+11	H + H+ -> H2+
+12	H + H+ -> H2+
+13	H2+ + H -> H2 + H+
+14	H2 + H+ -> H2+ + H
+15	H2 + H+ -> H2+ + H
+16	H2 + E -> H + H-
+17	H2 + E -> H + H + E
+18	H2 + H -> H + H + H
+19	H- + E -> H + E + E
+20	H- + H -> H + H + E
+21	H- + H -> H + H + E
+22	H- + H+ -> H + H
+23	H- + H+ -> H2+ + E
+24	H2+ + E -> H + H
+25	H2+ + E -> H + H
+26	H2+ + H- -> H + H2
+27	H2 + H2 -> H + H + H2
+28	HE+ + H -> HE + H+
+29	HE + H+ -> HE+ + H
+30	HE + H+ -> HE+ + H
+31	H2 + HE+ -> HE + H + H+
+32	H2 + HE -> H + H + HE
+33	H2 + HE+ -> H2+ + HE
+34	H + H -> H + H+ + E
+35	H + HE -> HE + H+ + E
+36	H -> H+ + E
+37	HE -> HE+ + E
+38	HE+ -> HE++ + E
+39	H- -> H + E
+40	H2 -> H2+ + E
+41	H2+ -> H+ + H
+42	H2+ -> H+ + H+ + E
+43	H2 -> H + H
+44	H2 -> H + H
+45	H+ + E -> H
+46	HE+ + E -> HE
+47	H -> H+ + E
+48	HE -> HE+ + E
+49	H2 -> H + H
+50	H2 -> H+ + H-
+51	H2 -> H2+ + E
+52	H2 -> H + H+ + E
+
+
+#********************************
+#list of reactions (without multiple limits)
+1	H2+ + H- -> H + H2
+2	H2 -> H+ + H-
+3	H2 + HE+ -> HE + H + H+
+4	H- + E -> H + E + E
+5	HE + H+ -> HE+ + H
+6	H+ + E -> H
+7	H2+ -> H+ + H
+8	HE+ + E -> HE++ + E + E
+9	H2 -> H + H
+10	HE -> HE+ + E
+11	H -> H+ + E
+12	HE+ + H -> HE + H+
+13	HE+ -> HE++ + E
+14	H- + H -> H + H + E
+15	H2+ -> H+ + H+ + E
+16	H2 -> H2+ + E
+17	H2 + H2 -> H + H + H2
+18	H- + H+ -> H2+ + E
+19	HE + E -> HE+ + E + E
+20	H + HE -> HE + H+ + E
+21	H2 + HE+ -> H2+ + HE
+22	H2 + H -> H + H + H
+23	HE++ + E -> HE+
+24	H2 + HE -> H + H + HE
+25	H2 + H+ -> H2+ + H
+26	H + E -> H-
+27	H + H+ -> H2+
+28	HE+ + E -> HE
+29	H- -> H + E
+30	H2+ + H -> H2 + H+
+31	H2 + E -> H + H-
+32	H- + H+ -> H + H
+33	H2 + E -> H + H + E
+34	H2 -> H + H+ + E
+35	H + E -> H+ + E + E
+36	H2+ + E -> H + H
+37	H- + H -> H2 + E
+38	H + H -> H + H+ + E
+
+
+#********************************
+#list of reactions (LaTeX format)
+#Table columns format {llllclllll}
+ 1 & H & + & e$^-$ & $\to$ & H$^+$ & + & e$^-$ & + & e$^-$\\
+ 2 & H$^+$ & + & e$^-$ & $\to$ & H & & & + & \\
+ 3 & H$^+$ & + & e$^-$ & $\to$ & H & & & + & \\
+ 4 & HE & + & e$^-$ & $\to$ & HE$^+$ & + & e$^-$ & + & e$^-$\\
+ 5 & HE$^+$ & + & e$^-$ & $\to$ & HE & & & + & \\
+ 6 & HE$^+$ & + & e$^-$ & $\to$ & HE & & & + & \\
+ 7 & HE$^+$ & + & e$^-$ & $\to$ & HE$^+$$^+$ & + & e$^-$ & + & e$^-$\\
+ 8 & HE$^+$$^+$ & + & e$^-$ & $\to$ & HE$^+$ & & & + & \\
+ 9 & H & + & e$^-$ & $\to$ & H$^-$ & & & + & \\
+ 10 & H$^-$ & + & H & $\to$ & H$_2$ & + & e$^-$ & + & \\
+ 11 & H & + & H$^+$ & $\to$ & H$_2$$^+$ & & & + & \\
+ 12 & H & + & H$^+$ & $\to$ & H$_2$$^+$ & & & + & \\
+ 13 & H$_2$$^+$ & + & H & $\to$ & H$_2$ & + & H$^+$ & + & \\
+ 14 & H$_2$ & + & H$^+$ & $\to$ & H$_2$$^+$ & + & H & + & \\
+ 15 & H$_2$ & + & H$^+$ & $\to$ & H$_2$$^+$ & + & H & + & \\
+ 16 & H$_2$ & + & e$^-$ & $\to$ & H & + & H$^-$ & + & \\
+ 17 & H$_2$ & + & e$^-$ & $\to$ & H & + & H & + & e$^-$\\
+ 18 & H$_2$ & + & H & $\to$ & H & + & H & + & H\\
+ 19 & H$^-$ & + & e$^-$ & $\to$ & H & + & e$^-$ & + & e$^-$\\
+ 20 & H$^-$ & + & H & $\to$ & H & + & H & + & e$^-$\\
+ 21 & H$^-$ & + & H & $\to$ & H & + & H & + & e$^-$\\
+ 22 & H$^-$ & + & H$^+$ & $\to$ & H & + & H & + & \\
+ 23 & H$^-$ & + & H$^+$ & $\to$ & H$_2$$^+$ & + & e$^-$ & + & \\
+ 24 & H$_2$$^+$ & + & e$^-$ & $\to$ & H & + & H & + & \\
+ 25 & H$_2$$^+$ & + & e$^-$ & $\to$ & H & + & H & + & \\
+ 26 & H$_2$$^+$ & + & H$^-$ & $\to$ & H & + & H$_2$ & + & \\
+ 27 & H$_2$ & + & H$_2$ & $\to$ & H & + & H & + & H$_2$\\
+ 28 & HE$^+$ & + & H & $\to$ & HE & + & H$^+$ & + & \\
+ 29 & HE & + & H$^+$ & $\to$ & HE$^+$ & + & H & + & \\
+ 30 & HE & + & H$^+$ & $\to$ & HE$^+$ & + & H & + & \\
+ 31 & H$_2$ & + & HE$^+$ & $\to$ & HE & + & H & + & H$^+$\\
+ 32 & H$_2$ & + & HE & $\to$ & H & + & H & + & HE\\
+ 33 & H$_2$ & + & HE$^+$ & $\to$ & H$_2$$^+$ & + & HE & + & \\
+ 34 & H & + & H & $\to$ & H & + & H$^+$ & + & e$^-$\\
+ 35 & H & + & HE & $\to$ & HE & + & H$^+$ & + & e$^-$\\
+ 36 & H & & & $\to$ & H$^+$ & + & e$^-$ & + & \\
+ 37 & HE & & & $\to$ & HE$^+$ & + & e$^-$ & + & \\
+ 38 & HE$^+$ & & & $\to$ & HE$^+$$^+$ & + & e$^-$ & + & \\
+ 39 & H$^-$ & & & $\to$ & H & + & e$^-$ & + & \\
+ 40 & H$_2$ & & & $\to$ & H$_2$$^+$ & + & e$^-$ & + & \\
+ 41 & H$_2$$^+$ & & & $\to$ & H$^+$ & + & H & + & \\
+ 42 & H$_2$$^+$ & & & $\to$ & H$^+$ & + & H$^+$ & + & e$^-$\\
+ 43 & H$_2$ & & & $\to$ & H & + & H & + & \\
+ 44 & H$_2$ & & & $\to$ & H & + & H & + & \\
+ 45 & H$^+$ & + & e$^-$ & $\to$ & H & & & + & \\
+ 46 & HE$^+$ & + & e$^-$ & $\to$ & HE & & & + & \\
+ 47 & H & & & $\to$ & H$^+$ & + & e$^-$ & + & \\
+ 48 & HE & & & $\to$ & HE$^+$ & + & e$^-$ & + & \\
+ 49 & H$_2$ & & & $\to$ & H & + & H & + & \\
+ 50 & H$_2$ & & & $\to$ & H$^+$ & + & H$^-$ & + & \\
+ 51 & H$_2$ & & & $\to$ & H$_2$$^+$ & + & e$^-$ & + & \\
+ 52 & H$_2$ & & & $\to$ & H & + & H$^+$ & + & e$^-$\\
