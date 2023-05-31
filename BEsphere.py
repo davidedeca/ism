@@ -4,7 +4,7 @@ import os
 
 from utils.constants import *
 
-print '... Loading Bonnor_Ebert profile database'
+print('... Loading Bonnor_Ebert profile database')
 path = os.path.abspath(__file__)
 dir_path = os.path.dirname(path)
 database = dir_path + '/data/BEsphereDB.npy'
@@ -59,7 +59,7 @@ class BEsphere:
         return n
 
     def densityprofile(self, N, log=0):     #numberdensity
-        print '... Computing Bonnor-Ebert sphere'
+        print('... Computing Bonnor-Ebert sphere')
         rho0 = self.Pext / self.csound ** 2
         rhoc = rho0 * np.exp(self.y0)
         R = self.radius()

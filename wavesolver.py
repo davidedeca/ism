@@ -19,7 +19,7 @@ class State:    # to define a fluid state, set only two among rho, P, T..
                 if rho == 0: T = 0
                 else: T = m * P / kB / rho
             else:
-                print "please, assign just two gas variables!"
+                print("please, assign just two gas variables!")
                 return
             self.rho = rho
             self.P = P
@@ -42,7 +42,13 @@ class State:    # to define a fluid state, set only two among rho, P, T..
         return np.sqrt(self.P/self.rho)
 
     def show(self):
-        print "n = ", self.rho/mp, "\tP = ", self.P, "\tT = ", self.T, "\tv = ", self.v, "\tgamma = ", self.gamma, "\tm = ", self.m
+        print("n = " + str(self.rho/mp))
+        print("P = " + str(self.P)) 
+        print("T = " + str( self.T))
+        print("v = " + str( self.v))
+        print("gamma = " + str( self.gamma))
+        print("m = " + str(self.m))
+        return 
 
 
 def shocksolver_Pgiven(state0, P1):     # returns post-shock state, if post-shock pressure is given

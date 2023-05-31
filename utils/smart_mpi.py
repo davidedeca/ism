@@ -38,7 +38,7 @@ def run_parallel(foo, Ncpu, args, params, return_value=True):
 
         Njobs_cpu = int(float(Njobs)/float(Ncpu))
         
-        print '.. running on', Ncpu, '('+str(Njobs_cpu)+' jobs each)'
+        print('.. running on ' +  str(Ncpu) + ' ('+str(Njobs_cpu)+' jobs each)')
 
         chunks = np.array_split(np.array(args), Ncpu, axis=1)
         #chunks = np.array_split(np.array(args), Njobs, axis=1)

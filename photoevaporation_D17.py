@@ -83,12 +83,10 @@ def evaporationtime(M, R, G0, P_ICM, T_ICM, n_max, T_pdr='analytical', d_pdr='bi
     
     assert d_pdr in ['bialy', 'empirical']
     if d_pdr == 'bialy':
-        print '*** D17 ***', nH, G0
         dHI = HI_thickness(nH, G0)
     elif d_pdr == 'empirical':
         dHI = HI_thickness_empirical(nH, G0)
       
-    print '--- D17 ---', R/pc, dHI/pc
     r0 = R - dHI  
     
     if r0 < 0:

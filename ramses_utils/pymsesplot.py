@@ -21,7 +21,7 @@ def var_list(wfd=False, path='.', num=1):
         variable_list = write_field_descr(path, num)
     else:
         variable_list = read_field_descr(path)
-    print variable_list
+    print(variable_list)
 
 
 def is_variable(var_name, namelist):
@@ -266,12 +266,12 @@ def make_maps(var, num, type_map='slice', show=True, path='.',path_out='.', wfd=
         elif(type_map =='fft' or type_map =='ray'):
           map[i] = mapp.process(op, cam,surf_qty=False)
 
-        print 'min', np.min(map[i]), 'max', np.max(map[i])
-        print 'mean', np.mean(map[i]), 'stdiv', np.std(map[i])
+        print('min ' + str(np.min(map[i])) + ' max ' + str(np.max(map[i])))
+        print('mean' + str(np.mean(map[i])) + ' stdiv ' + str(np.std(map[i])))
         #map[i][map[i]<1.e-20]=1.e-20
         if params['log']: 
             if map[i].min() <= 0.:
-                print 'WARNING: <=0 values are masked to make log'
+                print('WARNING: <=0 values are masked to make log')
                 mask = (map[i] <= 0.)
                 map[i][mask] = map[i][np.logical_not(mask)].min()   
             map[i] = np.log10(abs(map[i]))
@@ -299,7 +299,7 @@ def make_maps(var, num, type_map='slice', show=True, path='.',path_out='.', wfd=
             qk = plt.quiverkey(Q, 0.9, 0.9, 10, r'$10 \frac{km}{s}$', labelpos='E', coordinates='figure')
 
         if params['part']:# and type_map=='slice' :
-            print '.. adding particles'
+            print('.. adding particles')
             assert params['los'] == 'z', 'particles available only for los = z'
             part = d.particle_source(["mass"]).flatten()
             los_vector = [0., 0., 1.]
@@ -312,8 +312,8 @@ def make_maps(var, num, type_map='slice', show=True, path='.',path_out='.', wfd=
                        color=params['part_color'], edgecolor=params['part_edgecolor'])
 
         ax.set_title('$t=$' + '%.3f' %(d.info['time'] * d.info['unit_time'].express(C.Myr)) + ' Myr')
-        ax.set_xlabel('$\mathrm{pc}$')
-        ax.set_ylabel('$\mathrm{pc}$')
+        ax.set_xlabel('$\\mathrm{pc}$')
+        ax.set_ylabel('$\\mathrm{pc}$')
 
     params.setdefault('clevels', [np.min([np.min(map[i]) for i in range(n)]), np.max([np.max(map[i]) for i in range(n)])])
 
@@ -336,7 +336,7 @@ def make_maps(var, num, type_map='slice', show=True, path='.',path_out='.', wfd=
     cb = fig.colorbar(im, cax=cbar_ax, ticks=ticks)
     cb.set_clim(vmin=vmin, vmax=vmax)
     cbar_title = var + ' [' + unit + ']'
-    if params['log']: cbar_title = '$log\ $' + cbar_title
+    if params['log']: cbar_title = '$log $' + cbar_title
     cb.set_label(cbar_title)
 
     tag_out = type_map
@@ -350,8 +350,8 @@ def make_maps(var, num, type_map='slice', show=True, path='.',path_out='.', wfd=
         fig.show()
 
     out_f = path_out+ '/' + filename+'.'+params['format_out']
-    print 'printing file to'
-    print '  ',out_f
+    print('printing file to')
+    print('  ' + out_f)
     fig.savefig(out_f, dpi=params['dpi'])
     return map
 
@@ -372,9 +372,9 @@ class cube:
         source = cube.data.amr_source(variable_list)
         cell_source = CellsToPoints(source)
         cube.cells = cell_source.flatten()
-        print '--- Computing sizes..'
+        print('--- Computing sizes..')
         cube.sizes = cube.cells.get_sizes() * cube.data.info["unit_length"].express(C.pc)
-        print '--- Computing coordinates..'
+        print('--- Computing coordinates..')
         cube.centers = cube.cells.points * cube.data.info["unit_length"].express(C.pc)
 
     def var(self, var):
@@ -454,8 +454,8 @@ def radial_profile(var, num, show=True, path='.', path_out='.', wfd=False, **par
         variable_list = read_field_descr(path)
 
     var_to_load = get_var_to_load(var)
-    print var_to_load
-    print variable_list
+    print(var_to_load)
+    print(variable_list)
     assert set(var_to_load).issubset(variable_list)
 
     if (isinstance(num, int)): num = [num]
@@ -507,8 +507,8 @@ def radial_profile(var, num, show=True, path='.', path_out='.', wfd=False, **par
           filename = "profile_"+var+"_"+str(num[0]).zfill(5)+"-"+str(num[-1]).zfill(5)
       out_f = path_out + '/' + filename+'.'+params['format_out']
 
-      print 'printing file to'
-      print '  ',out_f
+      print('printing file to')
+      print('  ' + out_f)
       plt.savefig(out_f, dpi=params['dpi'])
 
       plt.show()
@@ -559,12 +559,12 @@ def simple_projection(var, num, show=True, path='.', wfd=False, **params):
             plt.plot(X, ave, label='$t=%.1g \,\mathrm{Myr}$' % d.info['time'])
 
     if not show:
-        print 'Not showing plot'
+        print('Not showing plot')
         return X, ave
 
     if params['clevels']: plt.ylim(ymin=params['clevels'][0], ymax=params['clevels'][1])
     plt.ylabel(var + '(' + unit + ')')
-    plt.xlabel('$\mathrm{pc}$')
+    plt.xlabel('$\\mathrm{pc}$')
     plt.legend(loc='upper right')
 
     if (n==1):
@@ -604,7 +604,7 @@ def profiley(var, num, log=False, show=True, path='.', path_out='.', wfd=False, 
         cam = Camera(line_of_sight_axis='z', up_vector='y')
         amr = d.amr_source(var_to_load)
         map = SliceMap(amr, cam, op, z=0.)
-        print int(np.sqrt(map.size)) / 2
+        print(int(np.sqrt(map.size)) / 2)
         extent = np.array([1. - params['size'], 1. + params['size']]) / 2.
         Y = map[int(np.sqrt(map.size))/2]
         Y = Y[ int(extent[0]*Y.size) : int(extent[1]*Y.size) ]

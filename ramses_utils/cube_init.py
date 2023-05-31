@@ -20,7 +20,7 @@ def apply_f(f, x, y, z):
 class cube:
 
   def __init__(self, ncell, boxlen, var_list=default_varlist):
-     print '... creating a '+str(ncell)+'^3 cube'
+     print('... creating a '+str(ncell)+'^3 cube')
      self.ncell    = ncell
      self.boxlen   = boxlen
      x = np.linspace(0.5, ncell-0.5, ncell) / ncell * boxlen
@@ -43,7 +43,7 @@ class cube:
      # (param 'radial' specifies if it's a function of radius)
      assert shape in ['fill', 'sphere', 'square']
      assert var in self.var_list
-     print '... adding '+var+' field to the cube'
+     print('... adding '+var+' field to the cube')
      params.setdefault('radial', False)
      if shape is 'sphere':
         params.setdefault('center', [0.,0.,0.])

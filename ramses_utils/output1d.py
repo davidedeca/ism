@@ -55,7 +55,6 @@ def f_T(data, fields, var):
     P  = data[:, fields.index('P')]
     n  = data[:, fields.index('n')]
     mu = f_mu(data, fields, var)
-    print np.amin(mu), np.amax(mu)
     return P / n * mu 
 
 ######### Define dictionaries
@@ -181,7 +180,7 @@ def plot_abundances(num, fields = default_fields, log = 0, yrange=[None,None]):
     for n in num:
 
         count += 1
-        print 'Plot ', count, ' of ', len(num)
+        print('Plot ' + count + ' of ' + str(len(num)))
         filename = 'output_' + str(n).zfill(5)
         data = np.loadtxt(filename)
         time = timestep * n

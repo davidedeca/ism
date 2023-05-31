@@ -24,19 +24,19 @@ def discontinuity_chooser(stateR, stateL):      # decides the resulting waves an
     vb = 2*cL*((PR/PL)**((gammaL-1)/2/gammaL)-1)/(gammaL-1)
     v = vL-vR
     if v > va:
-        print "two SW"
+        print("two SW")
         return 0
     elif v == va:
-        print "one SW"
+        print("one SW")
         return 1
     elif vb < v < va:
-        print "RW + SW"
+        print("RW + SW")
         return 2
     elif v == vb:
-        print "one RW"
+        print("one RW")
         return 3
     elif v < vb:
-        print "two RW"
+        print("two RW")
         return 4
 
 

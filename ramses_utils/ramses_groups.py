@@ -13,16 +13,16 @@ default_bins_krome = [0.7542, 2.65, 6., 11.2, 13.6, 14.159, 15.4, 24.59, 30, 54.
 
 
 def list_params():
-    print 'bins    >  array containing photon bin delimiters'
-    print 'krome   >  True of False wheter krome is used or not'
-    print 'source  >  point source or surface'
-    print 'spectr  >  for the moment, star and flat are implemented'
-    print 'keyworld parameters:'
-    print '  \'star\': L  >  bolometric luminosity (in Lsun units)'
-    print '        : R  >  distance from the star'
-    print '  \'flat\': G  > integrated flux within v1 and v2'
-    print '        :    v1  >  lower frequency limit of the flat spectrum (in eV)'
-    print '        :    v2  >  upper frequency limit of the flat spectrum (in eV)'
+    print('bins    >  array containing photon bin delimiters')
+    print('krome   >  True of False wheter krome is used or not')
+    print('source  >  point source or surface')
+    print('spectr  >  for the moment, star and flat are implemented')
+    print('keyworld parameters:')
+    print('  \'star\': L  >  bolometric luminosity (in Lsun units)')
+    print('        : R  >  distance from the star')
+    print('  \'flat\': G  > integrated flux within v1 and v2')
+    print('        :    v1  >  lower frequency limit of the flat spectrum (in eV)')
+    print('        :    v2  >  upper frequency limit of the flat spectrum (in eV)')
 
 def ramsesparameters(bins=default_bins, krome=False, source='point', spectr='star', **params):
 
@@ -52,11 +52,11 @@ def ramsesparameters(bins=default_bins, krome=False, source='point', spectr='sta
             Nphot[i] = S.N_cm2s(v[i], v[i + 1])
             F[i] = S.F_cm2s(v[i], v[i + 1])
 
-    print 'rt_n_source =', ', '.join(map(str, Nphot))
+    print('rt_n_source =', ', '.join(map(str, Nphot)))
 
-    print '\n&RT_GROUPS'
-    print 'groupL0 =', ', '.join(map(str, bins[0:len(bins) - 1]))
-    print 'groupL1 =', ', '.join(map(str, bins[1:len(bins)]))
+    print('\n&RT_GROUPS')
+    print('groupL0 = ' + ', '.join(map(str, bins[0:len(bins) - 1])))
+    print('groupL1 = ' + ', '.join(map(str, bins[1:len(bins)])))
 
     if krome is False:
 
@@ -89,7 +89,7 @@ def ramsesparameters(bins=default_bins, krome=False, source='point', spectr='sta
             aHeII[i] = aHeII[i] / (v[i + 1] - v[i])
 
         for i in range(len(v) - 1):
-            print 'group_csn(', i + 1, ',:) =', aHI[i], ', ', aHeI[i], ', ', aHeII[i]
+            print('group_csn(', i + 1, ',:) = ' + str(aHI[i]) + ', ' + str(aHeI[i]) + ', ' + str(aHeII[i]))
 
         def aw(v, nZ, ne, sh):
             return a(v, nZ, ne, sh) * S.Fv_s(v)
@@ -120,11 +120,11 @@ def ramsesparameters(bins=default_bins, krome=False, source='point', spectr='sta
             aHeII[i] = aHeII[i] / F[i]
 
         for i in range(len(v) - 1):
-            print 'group_cse(', i + 1, ',:) =', aHI[i], ', ', aHeI[i], ', ', aHeII[i]
+            print('group_cse(' + str(i + 1) + ',:) =' + str(aHI[i]) + ', ' + str(aHeI[i]) + ', ' + str(aHeII[i])
 
     egy = [F[i] / Nphot[i] / eV for i in range(len(F))]
-    print "group_egy =", ', '.join(map(str, egy))
-    print '/'
+    print("group_egy = " + ', '.join(map(str, egy)))
+    print('/')
 
 # --------------------------------------------------------------------------------------
 

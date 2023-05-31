@@ -21,17 +21,17 @@ if(len(argv)>1):
 				break
 		#if never found error message add -h to show help
 		if(not(aFound)):
-			print "argument "+v+" unknown!"
+			print("argument "+v+" unknown!")
 			argv.append("-h")
 			break
 	#show help
 	if("-h" in argv):
-		print "usage: python "+argv[0]+" [OPTIONS]"
-		print "\t-n list names only"
-		print "\t-sf=STRING search string in function name"
-		print "\t-sd=STRING search string in description"
-		print "\t-s=STRING search string in both"
-		print "\t-h show this help and exit"
+		print("usage: python "+argv[0]+" [OPTIONS]")
+		print("\t-n list names only")
+		print("\t-sf=STRING search string in function name")
+		print("\t-sd=STRING search string in description")
+		print("\t-s=STRING search string in both")
+		print("\t-h show this help and exit")
 		sys.exit()
 	#store search string to search later on
 	for v in argv:
@@ -98,7 +98,7 @@ for row in alltext.split("\n"):
 
 #sort aplhabetically
 flist = sorted(flist,key=lambda x:x[0])
-#print resuslts
+#print(resuslts
 icount = 0
 for x in flist:
 	#if not matches searh criteria skip
@@ -106,7 +106,7 @@ for x in flist:
 	fname = x[0]
 	while("  " in fname):
 		fname = fname.replace("  "," ")
-	print str(icount+1)+") "+fname.replace(", ",",")
-	print "  "+x[1]+"\n"
+	print(str(icount+1)+") "+fname.replace(", ",","))
+	print("  "+x[1]+"\n")
 	icount += 1
 

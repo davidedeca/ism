@@ -32,9 +32,9 @@ default_krome_path = os.path.join(go_up(__file__, 2), 'krome')
 
 def krome_init(path=default_krome_path):
     libkrome = os.path.join(path, 'libkrome.so')
-    print libkrome
+    print(libkrome)
     assert os.path.isfile(libkrome), 'krome not found in path ' + libkrome
-    print 'Using: ' + libkrome
+    print('Using: ' + libkrome)
     pk[0] = PyKROME(path_to_lib=path)
     pk[0].lib.krome_init()
     
@@ -159,25 +159,25 @@ class cell:
     def print_info(self):
         n_sorted = swap_ions(self.narray, 'from_pykrome')
         for i in range(len(ion_tag)):
-            print ion_tag[i], '\t', '{0:1.5e}'.format(n_sorted[i]), '\tcm-3'
-        print '\nntot', '\t', '{0:1.5e}'.format(np.sum(n_sorted)), '\tcm-3'
-        print 'T', '\t', '{0:1.5e}'.format(self.T.value), '\tK'
+            print(ion_tag[i] + '\t' + '{0:1.5e}'.format(n_sorted[i]) + '\tcm-3')
+        print('\nntot' + '\t' + '{0:1.5e}'.format(np.sum(n_sorted)) + '\tcm-3')
+        print('T' + '\t' + '{0:1.5e}'.format(self.T.value) + '\tK')
 
     def equilibrium(self, verbose=True):
         self.T = ctypes.c_double(self.T)
         if verbose is True:
-            print '\n ============== Initial abundances:'
+            print('\n ============== Initial abundances:')
             self.print_info()
         pk[0].lib.krome_equilibrium(self.narray, self.T)
         if verbose is True:
-            print '\n ============== Final abundances:'
+            print('\n ============== Final abundances:')
             self.print_info()
         self.T = self.T.value
 
     def evolution(self, t, dt=None, verbose=True):
         self.T = ctypes.c_double(self.T)
         if verbose is True:
-            print '\n ============== Initial abundances:'
+            print('\n ============== Initial abundances:')
             self.print_info()
         if dt is None:
             dt = t
@@ -186,14 +186,14 @@ class cell:
             pk[0].lib.krome(self.narray,ctypes.byref(self.T),ctypes.byref(ctypes.c_double(dt)))
             time = time + dt
         if verbose is True:
-            print '\n ============== Final abundances:'
+            print('\n ============== Final abundances:')
             self.print_info()
         self.T = self.T.value
 
     def evolution_tconst(self, t, dt=None, verbose=True):
         self.T = ctypes.c_double(self.T)
         if verbose is True:
-            print '\n ============== Initial abundances:'
+            print('\n ============== Initial abundances:')
             self.print_info()
         if dt is None:
             dt = t
@@ -202,7 +202,7 @@ class cell:
             pk[0].lib.krome_tconst(self.narray,ctypes.byref(self.T),ctypes.byref(ctypes.c_double(dt)))
             time = time + dt
         if verbose is True:
-            print '\n ============== Final abundances:'
+            print('\n ============== Final abundances:')
             self.print_info()
         self.T = self.T.value
 
@@ -264,13 +264,13 @@ def plot_cool_heat(kind, plot, data, ax, show_tot, ch_list, norm):
     show_plot=False
 
     if plot==True:
-        print 'Making plot...'
+        print('Making plot...')
         show_plot = True
         fig, ax = plt.subplots()
     elif isinstance(ax, Axes):
-        print 'Adding plot to axes...'
+        print('Adding plot to axes...')
     else:
-        print 'No axes to add the plot'
+        print('No axes to add the plot')
         ax = False
 
     data_to_plot = np.zeros((len(data[:, 0]), len(ch_list)+1))

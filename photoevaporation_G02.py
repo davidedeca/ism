@@ -28,9 +28,7 @@ def evaporationtime(M, R, G0, T_H2=50):
     T_HI = HI_temperature_krome(n_ave, G0)
     mu_H2 = 2.5
     mu_HI = 1.74
-    print '*** G02 ***', n_ave, G0
     delta = HI_thickness(n_ave, G0)
-    print '--- G02 ---', R/pc, delta/pc
     eta = R/delta
     cc   = np.sqrt(kB * T_H2 / mu_H2 / mp)
     cPDR = np.sqrt(kB * T_HI / mu_HI / mp)
@@ -39,10 +37,10 @@ def evaporationtime(M, R, G0, T_H2=50):
     # q = (lambd/3)**(1./3)
     # tc = SoundTime(T0, M, P_ICM, T_ICM, D, L, Rstar=1e11, type='star')
     if lambd < 1:
-        print 'Implosion case'
+        print('Implosion case')
         tPE = 1e4 * (n_ave / 1e5)**(2./3) * (R / 0.01 / pc)**(5./3) * (3e4 / cc)**(2./3) * (3e5 / cPDR)**(1./3) * yr
     else:
-        print "Expansion + implosion case"
+        print("Expansion + implosion case")
         tPE = 1e5 * (R / 0.01 / pc)**(1.) * (3e4 / cc)**(2.) * (3e5 / cPDR)**(-1.) * yr
   
     return tPE

@@ -15,17 +15,17 @@ from cycler import cycler
 #mpl.rcParams["lines.linewidth"] = 1.4
 
 # STRINGS
-cc   = '$\ \mathrm{cm}^{-3}$'
-Msun = '$\ \mathrm{M}_\odot$'
-pc   = '$\ \mathrm{pc}$'
-kpc  = '$\ \mathrm{kpc}$'
-Myr  = '$\ \mathrm{Myr}$'
-Lsun = '$\ \mathrm{L}_\odot$'
-mag  = '$\ \mathrm{mag}$'
-K    = '$\ \mathrm{K}$'
-km_s = '$\ \mathrm{km}\,\mathrm{s}^{-1}$'
-Kcc  = '$\ \mathrm{K}\,\mathrm{cm}^{-3}$'
-Msun_yr = '$\ \mathrm{M}_\odot\,\mathrm{yr}^{-1}$'
+cc   = r'$\ \mathrm{cm}^{-3}$'
+Msun = r'$\ \mathrm{M}_\odot$'
+pc   = r'$\ \mathrm{pc}$'
+kpc  = r'$\ \mathrm{kpc}$'
+Myr  = r'$\ \mathrm{Myr}$'
+Lsun = r'$\ \mathrm{L}_\odot$'
+mag  = r'$\ \mathrm{mag}$'
+K    = r'$\ \mathrm{K}$'
+km_s = r'$\ \mathrm{km}\,\mathrm{s}^{-1}$'
+Kcc  = r'$\ \mathrm{K}\,\mathrm{cm}^{-3}$'
+Msun_yr = r'$\ \mathrm{M}_\odot\,\mathrm{yr}^{-1}$'
 
 def brack(x):
     if x[0:3] == '$\\ ' and x[-1]=='$':

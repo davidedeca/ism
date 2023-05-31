@@ -24,19 +24,19 @@ def discontinuity_chooser(stateR, stateL):      # decides the resulting waves an
     vb = 2*cL*((PR/PL)**((gammaL-1)/2/gammaL)-1)/(gammaL-1)
     v = vL-vR
     if v > va:
-        print "two SW"
+        print("two SW")
         return 0
     elif v == va:
-        print "one SW"
+        print("one SW")
         return 1
     elif vb < v < va:
-        print "RW + SW"
+        print("RW + SW")
         return 2
     elif v == vb:
-        print "one RW"
+        print("one RW")
         return 3
     elif v < vb:
-        print "two RW"
+        print("two RW")
         return 4
 
 
@@ -84,11 +84,3 @@ def discontinuity_solver(stateR, stateL):
         v_eq = opt.brentq(H, -1e6, 1e6, args=(stateR, stateL))
         stateRR = ws.rarefactionsolver_Vgiven(stateR, v_eq)
         return stateRR.P
-
-for n in [1000, 1e4, 1e5, 1e6, 1e7]:
-    print '*****', n
-    sL = ws.State(n*mp, None, 0, T=1e5)
-    sR = ws.State(1000*mp, None, -3e4, T=1e5)
-    p = discontinuity_solver(sR, sL)
-    sRsh = ws.shocksolver_Pgiven(sR, p)
-    print sR.csound(), sRsh.csound(), sRsh.v, ws.shockspeed(sR, sRsh)
