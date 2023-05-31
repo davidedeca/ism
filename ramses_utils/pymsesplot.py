@@ -28,7 +28,7 @@ def is_variable(var_name, namelist):
     is_var = 0
     i_var = namelist.find(var_name)
     if i_var > -1:
-        while (namelist[i_var] is not '.'):
+        while (namelist[i_var] != '.'):
             i_var += 1
         if namelist[i_var+1] in ['f', 'F']: is_var = 0
         else: is_var = 1
@@ -226,16 +226,16 @@ def make_maps(var, num, type_map='slice', show=True, path='.',path_out='.', wfd=
     assert set(var_to_load).issubset(variable_list)
 
     k = 0
-    if n is 1: k = [1, 1, 7, 5]
-    elif n is 2: k = [1, 2, 12, 5]
-    elif n is 3: k = [1, 3, 16, 5]
+    if n == 1: k = [1, 1, 7, 5]
+    elif n == 2: k = [1, 2, 12, 5]
+    elif n == 3: k = [1, 3, 16, 5]
     elif n in [4, 5, 6]: k = [2, 3, 14, 7]
 
     fig, axes = plt.subplots(nrows=k[0], ncols=k[1], figsize=(k[2], k[3]))
     map = [None]*n
 
     for i in range(n):
-        if k[1] is 1: ax = axes
+        if k[1] == 1: ax = axes
         else: ax = axes.flat[i]
         d = pms.RamsesOutput(path, num[i])
         params.setdefault('res', 2 ** d.info['levelmax'])
@@ -321,7 +321,7 @@ def make_maps(var, num, type_map='slice', show=True, path='.',path_out='.', wfd=
     vmax = np.max(params['clevels'])
 
     for i in range(n):
-        if k[1] is 1: ax = axes
+        if k[1] == 1: ax = axes
         else: ax = axes.flat[i]
         size = params['size']
         extent = np.array([1.-size[0], 1.+size[0], 1.-size[1], 1.+size[1]]) * d.info['unit_length'].express(C.pc) / 2.
@@ -330,7 +330,7 @@ def make_maps(var, num, type_map='slice', show=True, path='.',path_out='.', wfd=
 
     fig.subplots_adjust(left=0.05, right=0.8, hspace=0.3)
     r_edge = 0.85
-    if n is 1: r_edge = 0.77
+    if n == 1: r_edge = 0.77
     cbar_ax = fig.add_axes([r_edge, 0.15, 0.03, 0.7])     # left side, bottom side, width, height
     ticks = np.linspace(vmin, vmax, 10)
     cb = fig.colorbar(im, cax=cbar_ax, ticks=ticks)
@@ -544,8 +544,8 @@ def simple_projection(var, num, show=True, path='.', wfd=False, **params):
         cells = cell_source.flatten()
         ccenters = cells.points
         dirr = 1
-        if params['dir'] is 'x': dirr = 0
-        if params['dir'] is 'z': dirr = 2
+        if params['dir'] == 'x': dirr = 0
+        if params['dir'] == 'z': dirr = 2
         cy = [C[dirr] for C in ccenters]
         values, unit = cell(d, cells, var)
         params.setdefault('ymin', 0.)

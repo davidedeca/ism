@@ -169,7 +169,7 @@ def plot(var, num, fields=default_fields, log=0, path='.', show=True, store=Fals
     if store:
     	return x, y
     else:
-	return
+        return
 
 def plot_abundances(num, fields = default_fields, log = 0, yrange=[None,None]):
 

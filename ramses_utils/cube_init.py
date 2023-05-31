@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import RegularGridInterpolator
-import ism.utils.fortranfile as ff
+from scipy.io import FortranFile
 import os, shutil
 
 default_varlist = ['d', 'vx', 'vy', 'vz', 'P']
@@ -45,20 +45,20 @@ class cube:
      assert var in self.var_list
      print('... adding '+var+' field to the cube')
      params.setdefault('radial', False)
-     if shape is 'sphere':
+     if shape == 'sphere':
         params.setdefault('center', [0.,0.,0.])
         params.setdefault('r', 0.)
-     elif shape is 'square':
+     elif shape == 'square':
         params.setdefault('size', [0., 0., 0.])
      index = self.var_list.index(var)
      matrix = np.copy(self.data[index])
-     if shape is 'fill':
+     if shape == 'fill':
         mask = np.full(matrix.shape, True)
-     elif shape is 'sphere':
+     elif shape == 'sphere':
         c = np.array(params['center'])
         r = np.sqrt((self.centers[0]-c[0])**2 + (self.centers[1]-c[1])**2 + (self.centers[2]-c[2])**2)
         mask = r <= params['r']
-     elif shape is 'square':
+     elif shape == 'square':
         c = np.array(params['center'])
         mask = np.logical_and(
                np.logical_and( abs(self.centers[0]-c[0]) <= params['size']/2.  ,
@@ -89,9 +89,9 @@ class cube:
      params.setdefault('depth', self.boxlen/2.)
      depth = int(params['depth'] / self.boxlen * len(self.data[0]))
      index = self.var_list.index(var)
-     if   params['dir'] is 'x': slicemap = self.data[index][:,:,depth]
-     elif params['dir'] is 'y': slicemap = self.data[index][:,depth,:]
-     elif params['dir'] is 'z': slicemap = self.data[index][depth,:,:]
+     if   params['dir'] == 'x': slicemap = self.data[index][:,:,depth]
+     elif params['dir'] == 'y': slicemap = self.data[index][:,depth,:]
+     elif params['dir'] == 'z': slicemap = self.data[index][depth,:,:]
      if params['log']: slicemap = np.log10(slicemap)
      slicemap *= params['factor']
      im = plt.imshow(slicemap, origin='lower', cmap='inferno',
@@ -101,14 +101,14 @@ class cube:
 
   def save(self, directory, var_list=None):
       if var_list is None:
-	  var_list=self.var_list
+          var_list=self.var_list
       if os.path.exists(directory):
           shutil.rmtree(directory)
       os.makedirs(directory)
       for var in var_list:
           filename = directory + '/ic_' + var + '.dat'
-          f = ff.FortranFile(filename, mode='w')
-          f.writeReals(self.get_var(var))
+          f = FortranFile(filename, mode='w')
+          f.write_record(self.get_var(var), dtype='=f')
           f.closefile()
 
 

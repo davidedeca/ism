@@ -28,15 +28,15 @@ def ramsesparameters(bins=default_bins, krome=False, source='point', spectr='sta
 
 
     S = None
-    if spectr is 'star':
+    if spectr == 'star':
         S = spectra.Spectrum.star(L=params['L'])
-        if source is 'surface': S.rescale(params['R'])
-    if spectr is 'quasar':
+        if source == 'surface': S.rescale(params['R'])
+    if spectr == 'quasar':
         S = spectra.QuasarSpectrum(Lbol=params['L'])
-        if source is 'surface': S.rescale(params['R'])
-    elif spectr is 'flat':
+        if source == 'surface': S.rescale(params['R'])
+    elif spectr == 'flat':
         S = spectra.FlatSpectrum(G=params['G'], v1=params['v1'], v2=params['v2'])
-    elif spectr is 'draine':
+    elif spectr == 'draine':
         S = spectra.DraineSpectrum(csi=params['csi'])
 
 
@@ -45,10 +45,10 @@ def ramsesparameters(bins=default_bins, krome=False, source='point', spectr='sta
     F = np.zeros(len(v) - 1)
 
     for i in range(len(v) - 1):
-        if source is 'point':
+        if source == 'point':
             Nphot[i] = S.N_s(v[i], v[i + 1])
             F[i] = S.L(v[i], v[i + 1])
-        elif source is 'surface':
+        elif source == 'surface':
             Nphot[i] = S.N_cm2s(v[i], v[i + 1])
             F[i] = S.F_cm2s(v[i], v[i + 1])
 
@@ -120,7 +120,7 @@ def ramsesparameters(bins=default_bins, krome=False, source='point', spectr='sta
             aHeII[i] = aHeII[i] / F[i]
 
         for i in range(len(v) - 1):
-            print('group_cse(' + str(i + 1) + ',:) =' + str(aHI[i]) + ', ' + str(aHeI[i]) + ', ' + str(aHeII[i])
+            print('group_cse(' + str(i + 1) + ',:) =' + str(aHI[i]) + ', ' + str(aHeI[i]) + ', ' + str(aHeII[i]))
 
     egy = [F[i] / Nphot[i] / eV for i in range(len(F))]
     print("group_egy = " + ', '.join(map(str, egy)))

@@ -1,6 +1,5 @@
 import multiprocessing
 import numpy as np
-from progressbar import ProgressBar, SimpleProgress
 
 #this function works ONLY if foo is vectorized
 
@@ -44,8 +43,6 @@ def run_parallel(foo, Ncpu, args, params, return_value=True):
         #chunks = np.array_split(np.array(args), Njobs, axis=1)
 
         pool = multiprocessing.Pool(Ncpu)
-
-        #pbar = ProgressBar(widgets=[SimpleProgress()], maxval=Njobs).start()
 
         tasks = []
         for nn in range(Ncpu):
