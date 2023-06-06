@@ -4,8 +4,10 @@ import matplotlib.pyplot as plt
 import pynbody
 
 
-available_global_props = ['nout', 'tout', 'Nstars', 'Mstars', 'MHII', 'MHI', 'MH2']
+available_global_props = ['nout', 't', 'Nstars', 'Mstars', 'MHII', 'MHI', 'MH2']
 available_derive_props = ['SFR']
+
+NBIG = 100000
 
 class GMCsimulation:
 
@@ -19,10 +21,11 @@ class GMCsimulation:
             print('creating directory ' + datapath)
             os.mkdir(datapath)
         self.checkpoint = os.path.join(datapath, os.path.basename(path) + '_props.npz')
+        print("GMC simulation object initialized")
         return 
 
 
-    def save_props(self, props):
+    def save_props(self, props, nmax=NBIG):
         props = np.atleast_1d(props)
         global_props = []
         derive_props = []
@@ -34,36 +37,42 @@ class GMCsimulation:
             else:
                 raise ValueError("Property not known!")
         if len(global_props)>0:
-            self.__save_global_props(global_props)
+            print("Starting to compute global cloud properties")
+            self.__save_global_props(global_props, nmax)
         if len(derive_props)>0:
-            self.__save_derive_props(derive_props)
+            print("Starting to save derived cloud properties")
+            self.__save_derive_props(derive_props, nmax)
         return 
 
 
-    def __save_global_props(self, props):
+    def __save_global_props(self, props, nmax=NBIG):
 
-        props += ['nout', 'tout']
+        props += ['nout', 't']
 
         nlast = dict()
+
         if os.path.isfile(self.checkpoint):
             data_old = np.load(self.checkpoint)
             for prop in props:
-                if prop in data_old.keys():
-                    nlast[prop] = data['nout'][-1]
+                if prop in data_old.files:
+                    nlast[prop] = data_old['nout'][-1]
                 else:
                     nlast[prop] = 1
         else:
             for prop in props:
                 nlast[prop] = 1
 
-        ncompleted = np.amin(nlast.values()) #min output for which all props are written 
-
+        ncompleted = np.amin(list(nlast.values())) #min output for which all props are written        
         data_new = dict()
 
         for prop in props:
             data_new[prop] = np.zeros(len(self.noutputs))
+        for prop in list(set(data_old.files) - set(props)):
+            data_new[prop] = data_old[prop]
+    
+        nrange = self.noutputs[self.noutputs <= nmax]
 
-        for i, nn in enumerate(self.noutputs):
+        for i, nn in enumerate(nrange):
 
             if nn < ncompleted:
 
@@ -85,8 +94,8 @@ class GMCsimulation:
                         if prop=='nout':
                             data_new['nout'][i] = nn
 
-                        elif prop=='tout':
-                            data_new['tout'][i] = snap.properties['time'].in_units('Myr')
+                        elif prop=='t':
+                            data_new['t'][i] = snap.properties['time'].in_units('Myr')
 
                         elif prop=='Nstars':
                             x = len(snap.s)
@@ -113,25 +122,25 @@ class GMCsimulation:
 
             print(".. snapshot " + str(nn) + " done")
 
-        np.savez(self.checkpoint, data_new)
+        np.savez(self.checkpoint, **data_new)
 
         return 
 
 
-    def __save_derive_props(self, props):
+    def __save_derive_props(self, props, nmax=NBIG):
 
         for prop in props:
 
             if prop=='SFR':
-                self.__save_global_props(['tout', 'Mstars'])
+                self.__save_global_props(['t', 'Mstars'], nmax)
                 data = dict(np.load(self.checkpoint))
-                sfr = np.gradient(data['Mstars']) / np.gradient(data['tout']) * 1e6
+                sfr = np.gradient(data['Mstars']) / np.gradient(data['t']) * 1e6
                 data['sfr'] = sfr
 
-        np.save(self.checkpoint, data)
+        np.savez(self.checkpoint, **data)
 
 
-    def get_props_evol(self, props):
+    def get_props(self, props):
 
         props = np.atleast_1d(props)
 
@@ -141,13 +150,18 @@ class GMCsimulation:
             data = np.load(self.checkpoint)
 
         for prop in props:
-            if prop not in data.keys():
+            if prop not in data.files:
                 raise ValueError("You need to save first the property " + prop)
 
-        data_return = {prop : data[prop] for prop in props}
+        if len(props) > 1:
+            data_return = {prop : data[prop] for prop in props}
+        else:
+            data_return = data[props[0]]
 
         return data_return 
 
+    def get_all_props(self):
+        return self.get_props(available_global_props+available_derive_props)
 
 
 
