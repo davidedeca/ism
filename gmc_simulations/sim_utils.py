@@ -2,6 +2,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import pynbody
+import pynbody.plot.sph as sph
 
 
 available_global_props = ['nout', 't', 'Nstars', 'Mstars', 'MHII', 'MHI', 'MH2']
@@ -10,6 +11,7 @@ available_derive_props = ['SFR']
 NBIG = 100000
 
 class GMCsimulation:
+
 
     def __init__(self, path, datapath):
 
@@ -24,6 +26,16 @@ class GMCsimulation:
         print("GMC simulation object initialized")
         return 
 
+
+    ####################
+
+    def snap(self):
+        filename = os.path.join(self.path, 'output_'+str(nn).zfill(5))
+        snap = pynbody.load(filename)
+        return 
+
+
+    ####################
 
     def save_props(self, props, nmax=NBIG):
         props = np.atleast_1d(props)
@@ -44,6 +56,8 @@ class GMCsimulation:
             self.__save_derive_props(derive_props, nmax)
         return 
 
+
+    ####################
 
     def __save_global_props(self, props, nmax=NBIG):
 
@@ -127,6 +141,8 @@ class GMCsimulation:
         return 
 
 
+    ####################
+
     def __save_derive_props(self, props, nmax=NBIG):
 
         for prop in props:
@@ -139,6 +155,47 @@ class GMCsimulation:
 
         np.savez(self.checkpoint, **data)
 
+
+    ####################
+
+    def save_map(self, var, nout, **kwargs):
+
+        var  = np.atleast_1d(var)
+        nout = np.atleast_1d(nout)
+
+        kwargs[ret_im] = True
+
+        for nn in nout:
+
+            filename = os.path.join(self.path, 'output_'+str(nn).zfill(5))
+            snap = pynbody.load(filename)
+
+            x = snap.g['x'].in_units('pc')
+            size = abs(x.max() - x.min())
+            snap['pos'] -= size/2.
+
+            if width not in kwargs.keys():
+                kwargs['width'] = str(size) + ' pc'
+
+            for vv in var:
+                data = dict()
+                im = sph.image(snap.g[vv], **kwargs)
+                data['array']  = im.get_array()
+                data['extent'] = im.get_extent() 
+                if 'units' in kwargs.keys():
+                    data['var_units'] = kwargs['units']
+                else:
+                    data['var_units']  = str(snap.g[vv].units)
+                data['axis_units'] = kwargs['width'].splits()[1]
+                plt.close()
+                filename = os.path.join(self.datapath, 'map_'+vv+'_'+str(nn).zfill(5))
+                np.savez(filename, **data)
+                print('map saved for snapshot ' + str(nn) + ' and variable ' + vv)
+
+        return 
+
+
+    ####################
 
     def get_props(self, props):
 
@@ -160,8 +217,69 @@ class GMCsimulation:
 
         return data_return 
 
+
+    ####################
+
     def get_all_props(self):
         return self.get_props(available_global_props+available_derive_props)
+
+
+    ####################
+
+    def get_map(self, var, nout):       
+
+        filename = os.path.join(self.datapath, 'map_'+var+'_'+str(nn).zfill(5)+'.npz')
+        data = np.load(filename)
+
+        return data
+
+
+    ####################
+
+    def get_ax(self, ax, var, nout, **kwargs):
+
+        filename = os.path.join(self.datapath, 'map_'+var+'_'+str(nn).zfill(5)+'.npz')
+        data = np.load(filename)
+
+        if 'extent' not in kwargs.keys():
+            kwargs['extent'] = data['extent']
+        if 'aspect' not in kwargs.keys():
+            extent = kwargs['extent']
+            kwargs[aspect] = (extent[1]-extent[0])/(extent[3]-extent[2])
+
+        im = ax.imshow(data['array'], **kwargs)
+
+        ax.set_xlabel(data['axis_units'])
+        ax.set_ylabel(data['axis_units'])
+
+        print("Returning image, axis units and colormap units")
+
+        return im, data['axis_units'], data['var_units']
+
+
+    ####################
+
+    def plot_map(self, var, nout, savefig=False, show=True, **kwargs):
+
+        var  = np.atleast_1d(var)
+        nout = np.atleast_1d(nout)
+
+        for nn in nout:
+            for vv in var:                
+
+                fig, ax = plt.subplots()
+                im, units = self.get_axis(ax, vv, nn, **kwargs)
+
+                cbar = plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+                cbar.ax.set_ylabel(var+' ['+units+']')
+
+                if savefig:
+                    plt.savefig(savefig)
+
+                if show:
+                    plt.show()
+
+        return data['axis_units'], data['var_units']
 
 
 
