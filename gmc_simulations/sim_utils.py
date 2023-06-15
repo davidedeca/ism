@@ -29,10 +29,10 @@ class GMCsimulation:
 
     ####################
 
-    def snap(self):
+    def snap(self, nn):
         filename = os.path.join(self.path, 'output_'+str(nn).zfill(5))
         snap = pynbody.load(filename)
-        return 
+        return snap 
 
 
     ####################
@@ -158,12 +158,12 @@ class GMCsimulation:
 
     ####################
 
-    def save_map(self, var, nout, **kwargs):
+    def save_map(self, var, nout, tag=None, **kwargs):
 
         var  = np.atleast_1d(var)
         nout = np.atleast_1d(nout)
 
-        kwargs[ret_im] = True
+        kwargs['ret_im'] = True
 
         for nn in nout:
 
@@ -174,21 +174,27 @@ class GMCsimulation:
             size = abs(x.max() - x.min())
             snap['pos'] -= size/2.
 
-            if width not in kwargs.keys():
+            if 'width' not in kwargs.keys():
                 kwargs['width'] = str(size) + ' pc'
 
             for vv in var:
                 data = dict()
-                im = sph.image(snap.g[vv], **kwargs)
-                data['array']  = im.get_array()
+                im = sph.image(snap.g, vv, **kwargs)
+                data['array']  = im.get_array().data
                 data['extent'] = im.get_extent() 
                 if 'units' in kwargs.keys():
                     data['var_units'] = kwargs['units']
                 else:
-                    data['var_units']  = str(snap.g[vv].units)
-                data['axis_units'] = kwargs['width'].splits()[1]
+                    str_units = str(snap.g[vv].units)
+                    if str_units == 'NoUnit()':
+                        data['var_units']  = ''
+                    else:
+                        data['var_units']  = str_units
+                data['axis_units'] = kwargs['width'].split()[1]
                 plt.close()
                 filename = os.path.join(self.datapath, 'map_'+vv+'_'+str(nn).zfill(5))
+                if tag is not None:
+                    filename += tag
                 np.savez(filename, **data)
                 print('map saved for snapshot ' + str(nn) + ' and variable ' + vv)
 
@@ -226,52 +232,61 @@ class GMCsimulation:
 
     ####################
 
-    def get_map(self, var, nout):       
+    def get_map(self, var, nout, tag=None):       
 
-        filename = os.path.join(self.datapath, 'map_'+var+'_'+str(nn).zfill(5)+'.npz')
-        data = np.load(filename)
+        filename = os.path.join(self.datapath, 'map_'+var+'_'+str(nout).zfill(5))
+        if tag is not None:
+            filename += tag
+        data = np.load(filename+'.npz')
 
         return data
 
 
     ####################
 
-    def get_ax(self, ax, var, nout, **kwargs):
+    def get_ax(self, ax, var, nout, tag=None, **kwargs):
 
-        filename = os.path.join(self.datapath, 'map_'+var+'_'+str(nn).zfill(5)+'.npz')
-        data = np.load(filename)
+        filename = os.path.join(self.datapath, 'map_'+var+'_'+str(nout).zfill(5))
+        if tag is not None:
+            filename += tag
+
+        try:
+            data = np.load(filename+'.npz')
+        except:
+            raise ValueError("Save map first with save_map")    
 
         if 'extent' not in kwargs.keys():
             kwargs['extent'] = data['extent']
         if 'aspect' not in kwargs.keys():
             extent = kwargs['extent']
-            kwargs[aspect] = (extent[1]-extent[0])/(extent[3]-extent[2])
+            kwargs['aspect'] = (extent[1]-extent[0])/(extent[3]-extent[2])
 
         im = ax.imshow(data['array'], **kwargs)
 
-        ax.set_xlabel(data['axis_units'])
-        ax.set_ylabel(data['axis_units'])
+        ax.set_xlabel(str(data['axis_units']))
+        ax.set_ylabel(str(data['axis_units']))
 
-        print("Returning image, axis units and colormap units")
+        print("Image added to the ax")
+        print("Returning also image, axis units and colormap units")
 
-        return im, data['axis_units'], data['var_units']
+        return im, str(data['axis_units']), str(data['var_units'])
 
 
     ####################
 
-    def plot_map(self, var, nout, savefig=False, show=True, **kwargs):
+    def plot_map(self, var, nout, tag=None, savefig=False, show=True, **kwargs):
 
         var  = np.atleast_1d(var)
         nout = np.atleast_1d(nout)
 
         for nn in nout:
             for vv in var:                
-
+                
                 fig, ax = plt.subplots()
-                im, units = self.get_axis(ax, vv, nn, **kwargs)
+                im, ax_units, var_units = self.get_ax(ax, vv, nn, tag, **kwargs)
 
                 cbar = plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-                cbar.ax.set_ylabel(var+' ['+units+']')
+                cbar.ax.set_ylabel(vv+' ['+var_units+']')
 
                 if savefig:
                     plt.savefig(savefig)
@@ -279,8 +294,7 @@ class GMCsimulation:
                 if show:
                     plt.show()
 
-        return data['axis_units'], data['var_units']
-
+        return 
 
 
 
