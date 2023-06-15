@@ -135,7 +135,7 @@ class GMCsimulation:
                 self.__save_global_props(['t', 'Mstars'], nmax)
                 data = dict(np.load(self.checkpoint))
                 sfr = np.gradient(data['Mstars']) / np.gradient(data['t']) * 1e6
-                data['sfr'] = sfr
+                data['SFR'] = sfr
 
         np.savez(self.checkpoint, **data)
 
@@ -162,23 +162,4 @@ class GMCsimulation:
 
     def get_all_props(self):
         return self.get_props(available_global_props+available_derive_props)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
