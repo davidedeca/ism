@@ -22,7 +22,7 @@ class GMCsimulation:
         if not os.path.isdir(datapath):
             print('creating directory ' + datapath)
             os.mkdir(datapath)
-        self.checkpoint = os.path.join(datapath, os.path.basename(path) + '_props.npz')
+        self.prop_evolution = os.path.join(datapath, 'prop_evolution.npz')
         print("GMC simulation object initialized")
         return 
 
@@ -65,8 +65,8 @@ class GMCsimulation:
 
         nlast = dict()
 
-        if os.path.isfile(self.checkpoint):
-            data_old = np.load(self.checkpoint)
+        if os.path.isfile(self.prop_evolution):
+            data_old = np.load(self.prop_evolution)
             for prop in props:
                 if prop in data_old.files:
                     nlast[prop] = data_old['nout'][-1]
@@ -136,7 +136,7 @@ class GMCsimulation:
 
             print(".. snapshot " + str(nn) + " done")
 
-        np.savez(self.checkpoint, **data_new)
+        np.savez(self.prop_evolution, **data_new)
 
         return 
 
@@ -149,11 +149,11 @@ class GMCsimulation:
 
             if prop=='SFR':
                 self.__save_global_props(['t', 'Mstars'], nmax)
-                data = dict(np.load(self.checkpoint))
+                data = dict(np.load(self.prop_evolution))
                 sfr = np.gradient(data['Mstars']) / np.gradient(data['t']) * 1e6
                 data['SFR'] = sfr
 
-        np.savez(self.checkpoint, **data)
+        np.savez(self.prop_evolution, **data)
 
 
     ####################
@@ -207,10 +207,10 @@ class GMCsimulation:
 
         props = np.atleast_1d(props)
 
-        if not os.path.isfile(self.checkpoint):
+        if not os.path.isfile(self.prop_evolution):
             raise ValueError("Save properties first!")
         else:
-            data = np.load(self.checkpoint)
+            data = np.load(self.prop_evolution)
 
         for prop in props:
             if prop not in data.files:
