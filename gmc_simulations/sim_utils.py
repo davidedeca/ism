@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pynbody
 import pynbody.plot.sph as sph
-
+import sph_utils.pynbody_operators
 
 available_global_props = ['nout', 't', 'Nstars', 'Mstars', 'MHII', 'MHI', 'MH2']
 available_derive_props = ['SFR']
@@ -127,11 +127,11 @@ class GMCsimulation:
                             data_new['MH2'][i] = x
 
                         elif prop=='MHI':
-                            x = np.sum(snap.g['xH'] * snap.g['mass'].in_units('Msol'))
+                            x = np.sum(snap.g['xHI'] * snap.g['mass'].in_units('Msol'))
                             data_new['MHI'][i] = x
 
                         elif prop=='MHII':
-                            x = np.sum(snap.g['xHj'] * snap.g['mass'].in_units('Msol'))
+                            x = np.sum(snap.g['xHII'] * snap.g['mass'].in_units('Msol'))
                             data_new['MHII'][i] = x
 
             print(".. snapshot " + str(nn) + " done")
