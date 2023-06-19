@@ -112,6 +112,18 @@ def alphaB(T): #Grassi+14
     return SimArray(k, 'cm**3 s**-1')
 
 @RamsesSnap.derived_quantity
+def xHI(sim):
+    return sim['ion1']
+
+@RamsesSnap.derived_quantity
+def xHII(sim):
+    return sim['ion3']
+
+@RamsesSnap.derived_quantity
+def xH2(sim):
+    return sim['ion8']
+
+@RamsesSnap.derived_quantity
 def nHI(sim):
     nHI = sim['rho'] * SimArray(sim['ion1'], '') / mm['ion1']
     return nHI.in_units('cm**-3')

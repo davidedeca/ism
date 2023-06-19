@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pynbody
 import pynbody.plot.sph as sph
-
+import sph_utils.pynbody_operators
 
 available_global_props = ['nout', 't', 'Nstars', 'Mstars', 'MHII', 'MHI', 'MH2']
 available_derive_props = ['SFR']
