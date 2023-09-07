@@ -7,20 +7,20 @@ from pynbody.snapshot.tipsy import TipsySnap
 from pynbody.array import SimArray
 
 from astropy.cosmology import FlatLambdaCDM
+from astropy import units as astropyunits
 cosmo = FlatLambdaCDM(H0=70, Om0=0.3, name='Jesper')
 
 mm = {
-    'ion1' : 1.67353251819e-24 * units.g ,
-    'ion2' : 9.10938188e-28    * units.g ,
-    'ion3' : 1.67262158e-24    * units.g ,
-    'ion4' : 6.69206503638e-24 * units.g ,
-    'ion5' : 6.69115409819e-24 * units.g ,
-    'ion6' : 6.69024316e-24    * units.g ,
-    'ion7' : 1.67444345638e-24 * units.g ,
-    'ion8' : 3.34706503638e-24 * units.g ,
-    'ion9' : 3.34615409819e-24 * units.g
+    'HI'    : 1.67353251819e-24 * units.g ,
+    'e'     : 9.10938188e-28    * units.g ,
+    'HII'   : 1.67262158e-24    * units.g ,
+    'HeI'   : 6.69206503638e-24 * units.g ,
+    'HeII'  : 6.69115409819e-24 * units.g ,
+    'HeIII' : 6.69024316e-24    * units.g ,
+    'H+'    : 1.67444345638e-24 * units.g ,
+    'H2'    : 3.34706503638e-24 * units.g ,
+    'H2+'   : 3.34615409819e-24 * units.g
     }
-
 
 hp = units.hP
 me = units.m_e
@@ -79,11 +79,10 @@ def p(sim):
 
 @RamsesSnap.derived_quantity
 def mu(sim):
-    out = SimArray(sim['ion1'], '') / mm['ion1']
-    for i in range(2,10):
-        ion = 'ion' + str(i)
-        out += SimArray(sim[ion], '') / mm[ion]
-    out = 1. / out / mm['ion1']
+    out = 0.
+    for key in mm.keys():
+        out += SimArray(sim['x'+key], '') / mm[key]
+    out = 1. / out / mm['HI']
     return out
 
 @RamsesSnap.derived_quantity
@@ -112,35 +111,23 @@ def alphaB(T): #Grassi+14
     return SimArray(k, 'cm**3 s**-1')
 
 @RamsesSnap.derived_quantity
-def xHI(sim):
-    return sim['ion1']
-
-@RamsesSnap.derived_quantity
-def xHII(sim):
-    return sim['ion3']
-
-@RamsesSnap.derived_quantity
-def xH2(sim):
-    return sim['ion8']
-
-@RamsesSnap.derived_quantity
 def nHI(sim):
-    nHI = sim['rho'] * SimArray(sim['ion1'], '') / mm['ion1']
+    nHI = sim['rho'] * SimArray(sim['xHI'], '') / mm['HI']
     return nHI.in_units('cm**-3')
 
 @RamsesSnap.derived_quantity
 def nHII(sim):
-    nHII = sim['rho'] * SimArray(sim['ion3'], '') / mm['ion3']
+    nHII = sim['rho'] * SimArray(sim['xHII'], '') / mm['HII']
     return nHII.in_units('cm**-3')
 
 @RamsesSnap.derived_quantity
 def ne(sim):
-    ne = sim['rho'] * SimArray(sim['ion2'], '') / mm['ion2']
+    ne = sim['rho'] * SimArray(sim['xe'], '') / mm['e']
     return ne.in_units('cm**-3')
 
 @RamsesSnap.derived_quantity
 def nH2(sim):
-    nH2 = sim['rho'] * SimArray(sim['ion8'], '') / mm['ion8']
+    nH2 = sim['rho'] * SimArray(sim['xH2'], '') / mm['H2']
     return nH2.in_units('cm**-3')
 
 @RamsesSnap.derived_quantity
@@ -153,15 +140,15 @@ def fHI(sim):
 
 @RamsesSnap.derived_quantity
 def MHI(sim):
-    return sim['mass'] * SimArray(sim['ion1'], '')
+    return sim['mass'] * SimArray(sim['xHI'], '')
 
 @RamsesSnap.derived_quantity
 def MHII(sim):
-    return sim['mass'] * SimArray(sim['ion3'], '')
+    return sim['mass'] * SimArray(sim['xHII'], '')
 
 @RamsesSnap.derived_quantity
 def MH2(sim):
-    return sim['mass'] * SimArray(sim['ion8'], '')
+    return sim['mass'] * SimArray(sim['xH2'], '')
 
 
 def gamma_1s2p(T): #Scholz1991
@@ -217,9 +204,9 @@ def Lya(sim):
 @RamsesSnap.derived_quantity
 def SB_c(sim):
     L = sim['Lya_c']
-    sim.properties['z'] = 2.
-    dL = cosmo.luminosity_distance(sim.properties['z']).value * units.kpc
-    as_kpc = cosmo.arcsec_per_kpc_proper(sim.properties['z']).value * units.arcsec / units.kpc
+    dL = cosmo.luminosity_distance(sim.properties['z']).to(astropyunits.kpc).value * units.kpc
+    #dL = cosmo.luminosity_distance(sim.properties['z']).to(astropyunits.Mpc).value * units.kpc
+    as_kpc = cosmo.arcsec_per_kpc_proper(sim.properties['z']).to(astropyunits.arcsec/astropyunits.kpc).value * units.arcsec / units.kpc
     dx = sim['smooth']
     SB_c = L *dx / 4. / np.pi / dL**2 / as_kpc**2
     return SB_c.in_units('erg s**-1 cm**-2 arcsec**-2')
@@ -227,9 +214,8 @@ def SB_c(sim):
 @RamsesSnap.derived_quantity
 def SB_r(sim):
     L = sim['Lya_r']
-    sim.properties['z'] = 2.
-    dL = cosmo.luminosity_distance(sim.properties['z']).value * units.kpc
-    as_kpc = cosmo.arcsec_per_kpc_proper(sim.properties['z']).value * units.arcsec / units.kpc
+    dL = cosmo.luminosity_distance(sim.properties['z']).to(astropyunits.kpc).value * units.kpc
+    as_kpc = cosmo.arcsec_per_kpc_proper(sim.properties['z']).to(astropyunits.arcsec/astropyunits.kpc).value * units.arcsec / units.kpc
     dx = sim['smooth']
     SB_r = L * dx / 4. / np.pi / dL**2 / as_kpc**2
     return SB_r.in_units('erg s**-1 cm**-2 arcsec**-2')
