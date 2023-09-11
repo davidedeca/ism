@@ -2,4 +2,6 @@
 *.pyc
 *.mod
 *.o
-data/*
+*.so
+data_untracked
+data_untracked/*
