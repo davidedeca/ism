@@ -12,8 +12,10 @@ error_msg = 'create BEsphereDB.npy database first by running BEsphereDB.py'
 error_msg_mag = 'create BEsphereDB_mag.npy database first by running BEsphereDB_mag.py'
 
 path = os.path.abspath(__file__)
-dir_path = os.path.dirname(os.path.dirname(path))
-dir_path = os.path.join(dir_path, 'data_untracked')
+#dir_path = os.path.dirname(os.path.dirname(path))
+#dir_path = os.path.join(dir_path, 'data')
+
+dir_path = os.path.dirname(path)
 
 path_db  = os.path.join(dir_path, 'BEsphereDB.npy')
 assert(os.path.isdir(path_db)), error_msg

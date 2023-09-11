@@ -5,8 +5,8 @@ from scipy.interpolate import griddata
 from scipy import integrate
 
 from utils.constants import *
-import wavesolver as ws
-import arbitrarydiscontinuities_isothermal as ad
+import wave_propagation.wavesolver as ws
+import wave_propagation.arbitrarydiscontinuities_isothermal as ad
 
 TH2 = 50
 

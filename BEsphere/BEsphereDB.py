@@ -34,10 +34,10 @@ def save_BEtable(dim, max_radius):
         * np.divide(np.gradient(y), np.gradient(x)) * np.square(x)
 
     path = os.path.abspath(__file__)
-    dir_path = os.path.dirname(os.path.dirname(path))
-    dir_path = os.path.join(dir_path, 'data_untracked')
-    if not(os.path.isdir(dir_path)):
-        os.mkdir(dir_path)
+    #dir_path = os.path.dirname(os.path.dirname(path))
+    #dir_path = os.path.join(dir_path, 'data
+    dir_path = os.path.dirname(path)
+    print dir_path
     np.save(os.path.join(dir_path,"BEsphereDB"), [x, y, m])
 
 

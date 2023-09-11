@@ -5,7 +5,6 @@ from matplotlib.axes import Axes
 import ctypes
 from pykrome_class import PyKROME
 
-sys.path.append('..')
 from utils.constants import *
 import utils.plotstyle as ps
 from utils.io import go_up

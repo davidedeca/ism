@@ -60,7 +60,7 @@ profile: all
 #gfortran target
 gfortran: fc = gfortran
 gfortran: cc = gcc
-gfortran: switch = -ffree-line-length-none -fPIC
+gfortran: switch = -ffree-line-length-none -fallow-argument-mismatch -fPIC
 gfortran: nowarn = $(nowarnGNU)
 gfortran: clib = -lm -lgfortran
 gfortran: all

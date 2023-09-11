@@ -8,11 +8,9 @@ from pymses.analysis.visualization import Camera, SliceMap, ScalarOperator,raytr
 from pymses.analysis.visualization import fft_projection as fft_proj
 from pymses.utils import constants as C
 from pymses.filters import CellsToPoints
-from pymsesplot_operators import get_var_to_load, operator, cell, NION
-import pymsesplot_operators
+from ramses_utils.pymsesplot_operators import get_var_to_load, operator, cell, NION
+import ramses_utils.pymsesplot_operators
 reload(pymsesplot_operators)
-
-sys.path.append('..')
 
 ionization_fractions = ['ion'+str(i+1) for i in xrange(NION)]
 

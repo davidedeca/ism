@@ -1,1 +1,0 @@
-cf_table.I2.dat filter=lfs diff=lfs merge=lfs -text

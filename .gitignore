@@ -3,5 +3,4 @@
 *.mod
 *.o
 *.so
-data_untracked
-data_untracked/*
+*.npy

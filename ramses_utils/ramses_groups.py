@@ -1,10 +1,9 @@
 import sys
 import numpy as np
-import scipy.integrate as int
+import scipy.integrate as integrate
 
-sys.path.append('..')
 from utils.constants import *
-import spectra as spectra
+import star_utils.spectra as spectra
 import GnedinCooling.cross_section as cs
 
 
@@ -71,21 +70,21 @@ def ramsesparameters(bins=default_bins, krome=False, source='point', spectr='sta
             if bins[i] < 13.6:
                 aHI[i] = 0
             else:
-                aHI[i] = int.quad(a, v[i], v[i + 1], args=(1, 1, 1))[0]
+                aHI[i] = integrate.quad(a, v[i], v[i + 1], args=(1, 1, 1))[0]
             aHI[i] = aHI[i] / (v[i + 1] - v[i])
 
         for i in range(len(v) - 1):
             if bins[i] < 24.59:
                 aHeI[i] = 0
             else:
-                aHeI[i] = int.quad(a, v[i], v[i + 1], args=(2, 2, 1))[0]
+                aHeI[i] = integrate.quad(a, v[i], v[i + 1], args=(2, 2, 1))[0]
             aHeI[i] = aHeI[i] / (v[i + 1] - v[i])
 
         for i in range(len(v) - 1):
             if bins[i] < 54.42:
                 aHeII[i] = 0
             else:
-                aHeII[i] = int.quad(a, v[i], v[i + 1], args=(2, 1, 1))[0]
+                aHeII[i] = integrate.quad(a, v[i], v[i + 1], args=(2, 1, 1))[0]
             aHeII[i] = aHeII[i] / (v[i + 1] - v[i])
 
         for i in range(len(v) - 1):
@@ -102,21 +101,21 @@ def ramsesparameters(bins=default_bins, krome=False, source='point', spectr='sta
             if bins[i] < 13.6:
                 aHI[i] = 0
             else:
-                aHI[i] = int.quad(aw, v[i], v[i + 1], args=(1, 1, 1))[0]
+                aHI[i] = integrate.quad(aw, v[i], v[i + 1], args=(1, 1, 1))[0]
             aHI[i] = aHI[i] / F[i]
 
         for i in range(len(v) - 1):
             if bins[i] < 24.59:
                 aHeI[i] = 0
             else:
-                aHeI[i] = int.quad(aw, v[i], v[i + 1], args=(2, 2, 1))[0]
+                aHeI[i] = integrate.quad(aw, v[i], v[i + 1], args=(2, 2, 1))[0]
             aHeI[i] = aHeI[i] / F[i]
 
         for i in range(len(v) - 1):
             if bins[i] < 54.42:
                 aHeII[i] = 0
             else:
-                aHeII[i] = int.quad(aw, v[i], v[i + 1], args=(2, 1, 1))[0]
+                aHeII[i] = integrate.quad(aw, v[i], v[i + 1], args=(2, 1, 1))[0]
             aHeII[i] = aHeII[i] / F[i]
 
         for i in range(len(v) - 1):

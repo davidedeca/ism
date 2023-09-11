@@ -3,7 +3,7 @@ import scipy.optimize as opt
 import matplotlib.pyplot as plt
 
 from utils.constants import *
-import wavesolver as ws
+import wave_propagation.wavesolver as ws
 
 # R = gas on the right, L = gas on the left, PL>PR assumed in the case of resulting shock and rarefaction
 # the positive sign of velocity is toward the right

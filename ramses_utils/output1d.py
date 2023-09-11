@@ -2,7 +2,6 @@ import numpy as np
 import sys, os
 import matplotlib.pyplot as plt
 
-sys.path.append('..')
 from utils.constants import *
 
 mass_ion = {
