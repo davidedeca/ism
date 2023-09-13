@@ -7,17 +7,8 @@ from constants import *
 
 f_one = lambda x: 1.
 
-def return_power_spectrum(power_index, kmin, kmax):
-    def power_spectrum_function(k):
-        k = np.array(k)
-        ps = np.zeros_like(k)
-        mask = np.logical_and((k > kmin), (k < kmax))
-        ps[mask] = k[mask]**power_index
-        return ps
-    return power_spectrum_function
 
-
-def get_k(input_array, box_dims):
+def _get_k(input_array, box_dims):
     dim = len(input_array.shape)
     if dim == 1:
         x = np.arange(len(input_array))
@@ -42,7 +33,28 @@ def get_k(input_array, box_dims):
         return [kx,ky,kz], k
 
 
+def return_power_spectrum(power_index, kmin, kmax):
+    """
+    Returns the power spectrum function f(k) = k^power_index between kmin and kmax
+    """
+    def power_spectrum_function(k):
+        k = np.array(k)
+        ps = np.zeros_like(k)
+        mask = np.logical_and((k >= kmin), (k <= kmax))
+        ps[mask] = k[mask]**power_index
+        return ps
+    return power_spectrum_function
+
+
 def scalar_perturbs(level, boxlen, power_spectrum, scale_factor=f_one, random_seed=None):
+    """
+    Generate a random gaussian field in 3d
+    level  : level N means resolution 2^N per side
+    boxlen : boxlen in any units
+    power_spectrum : function returned by "return_power_spectrum"
+    scale_factor : a function of (kx, ky, kz) that is applied to the map before being returned
+    random_seed : None means a random number  
+    """
 
     cells = 2**level
     Lcell = boxlen / cells
@@ -57,7 +69,7 @@ def scalar_perturbs(level, boxlen, power_spectrum, scale_factor=f_one, random_se
     map_ft_real = np.random.normal(loc=0., scale=1., size=dims)
     map_ft_imag = np.random.normal(loc=0., scale=1., size=dims)
     map_ft = map_ft_real + 1j*map_ft_imag
-    k_comp, k_mod = get_k(map_ft_real, box_dims)
+    k_comp, k_mod = _get_k(map_ft_real, box_dims)
 
     del map_ft_real
     del map_ft_imag
@@ -72,6 +84,10 @@ def scalar_perturbs(level, boxlen, power_spectrum, scale_factor=f_one, random_se
 
 
 def isotropic_vector_perturbs(level, boxlen, power_spectrum, scale_factor=f_one, random_seed=None):
+    """
+    Generates 3 random gaussian fields, by first generating a rgf with "scale_factor" and then determining
+    the components by randomly drawing angles theta and phi
+    """
     velocity = scalar_perturbs(level, boxlen, power_spectrum, scale_factor, random_seed)
     theta = np.ones_like(velocity) * 2. * np.pi * np.random.uniform(size=velocity.shape)
     phi = np.ones_like(velocity) * np.arccos(1 - 2. * np.random.uniform(size=velocity.shape))

@@ -89,7 +89,3 @@ rebecca = '#663399'
 salmon = '#FA8072'
 mediumseagreen = '#3CB371'
 saddlebrown = '#8B4513'
-
-colors = {'blue' : royalblue, 'red' : '#ff4c4c'}
-
-#mpl.rcParams["axes.prop_cycle"] = cycler('color', [salmon, mediumseagreen, saddlebrown, rebecca])

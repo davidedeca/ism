@@ -173,9 +173,7 @@ class star(Spectrum):
         self.Teff  = (Lstar / (4 * np.pi * self.Rstar** 2 * sigmaSB)) ** (1. / 4)
 
         if library == 'black_body':
-            def flux(v):
-                F = 2 * h * v**3 / clight**2 / (np.exp(h*v/kB/self.Teff) - 1) * np.pi
-                return F
+            flux = lambda v: 2 * h * v**3 / clight**2 / (np.exp(h*v/kB/self.Teff) - 1) * np.pi
 
         else:
             if library == 'basel':       
@@ -194,8 +192,7 @@ class star(Spectrum):
             except RuntimeError:
                 sp = 2 * h * frequency**3 / clight**2 / (np.exp(h*frequency/kB/params_cleaned['Teff']) - 1) * np.pi
             f = interp1d(frequency, sp, bounds_error=False, fill_value=0.)   # interpolating, all the absorption lines are lost!!
-            def flux(v):
-                return f(v)
+            flux = lambda v: F(v)
 
         super(star, self).__init__(flux, self.Rstar, np.pi)
 
@@ -214,9 +211,7 @@ class cmb(Spectrum):
 
         self.Tcmb = Tcmb
 
-        def flux(v):
-            F = 2 * h * v**3 / clight**2 / (np.exp(h*v/kB/Tcmb) - 1) * np.pi
-            return F
+        flux = lambda v: 2 * h * v**3 / clight**2 / (np.exp(h*v/kB/Tcmb) - 1) * np.pi
 
         super(cmb, self).__init__(flux, None, 4.*np.pi)
 
