@@ -46,6 +46,11 @@ class Spectrum(object):
     L            : flux in [erg/s] in the frequency range (v1, v2) [Hz]
     N_srs        : flux in [photons/s/sr] in the frequency range (v1, v2) [Hz]
     L_sr         : flux in [erg/s/sr] in the frequency range (v1, v2) [Hz]
+
+    You can always pass
+    - funct      : a function that has to be multiplied to the spectrum when integrating (e.g. absorption factor exp(-tau(v)))
+    - *args      : parameter to pass to funct, beside the frequency v
+    - **kwargs   : parameters to pass to quad when integrating
     """
 
     def __init__(self, flux, R, omega):
@@ -74,19 +79,19 @@ class Spectrum(object):
     def Nv_cm2srs(self, v, funct=f_one, *args):
         return self.Fv_cm2s(v, funct, *args) / h / v / self.omega
 
-    def N_cm2s(self, v1, v2, funct=f_one, *args, **kwargs):  # number of photons / s [into a range of frequencies, default = ionizing photons]
+    def N_cm2s(self, v1, v2, funct=f_one, *args, **kwargs):  # number of photons / s [into a range of frequencies]
         a = integrate.quad(self.Nv_cm2s, v1, v2, args=(funct,)+args, **kwargs)
         return a[0]
 
-    def F_cm2s(self, v1, v2, funct=f_one, *args, **kwargs):  # number of photons / s [into a range of frequencies, default = ionizing photons]
+    def F_cm2s(self, v1, v2, funct=f_one, *args, **kwargs):  # number of photons / s [into a range of frequencies]
         a = integrate.quad(self.Fv_cm2s, v1, v2, args=(funct,)+args, **kwargs)
         return a[0]
 
-    def N_cm2srs(self, v1, v2, funct=f_one, *args, **kwargs):  # number of photons / s [into a range of frequencies, default = ionizing photons]
+    def N_cm2srs(self, v1, v2, funct=f_one, *args, **kwargs):  # number of photons / s [into a range of frequencies]
         a = integrate.quad(self.Nv_cm2s, v1, v2, args=(funct,)+args, **kwargs)
         return a[0] / self.omega
 
-    def F_cm2srs(self, v1, v2, funct=f_one, *args, **kwargs):  # number of photons / s [into a range of frequencies, default = ionizing photons]
+    def F_cm2srs(self, v1, v2, funct=f_one, *args, **kwargs):  # number of photons / s [into a range of frequencies]
         a = integrate.quad(self.Fv_cm2s, v1, v2, args=(funct,)+args, **kwargs)
         return a[0] / self.omega
 
@@ -141,7 +146,7 @@ class Spectrum(object):
 class star(Spectrum):
     """
     class star
-    Generates a stellar Spectrum object for a given stellar luminosity [erg/s]
+    Generates a stellar Spectrum object for a given stellar luminosity Lstar [erg/s]
     The initial distance at which the flux is computed is the stellar radius
     You can choose black_body spectrum, basel library or kurucz library
 

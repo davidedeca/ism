@@ -5,8 +5,9 @@ kB = 1.380648e-16       #Boltzmann constant
 G  = 6.6743015e-8        #Universal gravitational constant
 mp = 1.67262158e-24     #proton mass
 me = 9.1094E-28         #electron mass
-
+hplanck = 6.62607015e-27
 eV = 1.6021772E-12      #electronvolt
+eVh = eVh
 ryd = 13.6057039763*eV  #Rydberg energy 
 vL = ryd / h            #Lyman-continuum frequency
 gamma1 = 5./3           #gamma monoatomic gas

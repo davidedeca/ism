@@ -1,5 +1,6 @@
 import numpy as np
 from constants import *
+import utils.phfit2 as phfit2
 
 
 def meandensity(M, R, shape='sphere'):
@@ -57,3 +58,61 @@ def sigmaturb(M, R, alpha):
     - the virial parametera alpha 
     """
     return np.sqrt(3./5 * G * M / R * alpha)
+
+
+def a_Ferland(v):      
+    """
+    photoionization cross section (Osterbrock, Ferland book) in cm-2, as a function of frequency 
+    """
+
+    eps = np.sqrt(v/(ryd/h) - 1)
+    return 6.3E-18 * ((ryd/h)/v)**4 * np.exp(4-4*np.arctan(eps)/eps) / (1-np.exp(-2*np.pi/eps))
+
+
+def a_Verner(nZ, ne, sh, v):        
+    """
+    photoionization cross section (Verner1996) in cm-2
+    - nZ : atomic number from 1 to 30 (integer) 
+    - ne : number of electrons from 1 to iz (integer)
+    - sh : shell number (integer)
+    - v  : photon frequency, Hz 
+    """
+
+    return 1e6 * 1e-24 * phfit2.phfit2(nZ, ne, sh, h*v/eV)
+
+
+def alphaB(T):
+    return alphaB_Cen92(T)
+
+def alphaB_Cen92(T):
+    """
+    recombination coefficient on hydrogen, Cen+1992
+    """
+    return 8.4e-11 * T**(-0.5) * (T/1e3)**(-0.2) / (1+(T/1e6)**0.7)
+
+def alphaB_Abel17(T):
+    """
+    recombination coefficient on hydrogen, Abel+2017
+    """
+    Te = np.atleast_1d(T * kB / eV) 
+    aB = np.zeros_like(Te)
+
+    coeff = [-28.61303380689232, -7.241125657826851e-1, -2.026044731984691e-2, -2.380861877349834e-3,
+             -3.212605213188796e-4, -1.421502914054107e-5, 4.989108920299510e-6, 5.755614137575750e-7,
+             -1.856767039775260e-8, -3.071135243196590e-9]
+
+    aB[T>5500.]  = np.exp(np.poly1d(coeff[::-1])(np.log(Te)))
+    aB[T<=5550.] = 3.92e-13 * np.power(Te, -0.6353) 
+
+    return aB
+
+def betaB(T):                                  
+    """
+    recombination energy loss coefficient (Cen 1992)
+    """
+    return 6.3e-11 * T**(-0.5) * (T/1e3)**(-0.2) / (1+(T/1e6)**0.7)
+
+def gamma_coll(T):
+    return 5.85e-11 * T**0.5 * (1 + (T/1e5)**0.5) * np.exp(-157809.1/T)
+
+
